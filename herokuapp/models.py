@@ -23,8 +23,8 @@ class Customer(models.Model):
     create_date = models.DateField('Ngày Nhập', default=datetime.date.today)
     start_date = models.DateField('Ngày Tàu Đi')
     start_time_train = models.TimeField('Giờ Đi', max_length=50)
-    end_date = models.DateField('Ngày Tàu Về')
-    end_time_train = models.TimeField('Giờ Về', max_length=50)
+    end_date = models.DateField('Ngày Tàu Về',null=True, blank=True)
+    end_time_train = models.TimeField('Giờ Về', max_length=50,null=True, blank=True)
     note = models.TextField('Ghi Chú', max_length=2000)
     status = models.IntegerField(
         'Trạng Thái', default=0, choices=STATUS_BOOK_TICKET) 
