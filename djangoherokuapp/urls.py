@@ -20,7 +20,6 @@ urlpatterns = [
     # https://jet.readthedocs.io/en/latest/install.html
     path('jet/', include('jet.urls','jet')), # JET URLS  
     path('jet/dashboard/', include('jet.dashboard.urls','jet-dashboard')), # Django JET dashboard URLS
-    path('admin/', admin.site.urls), 
     path('', admin.site.urls), 
     path('api/', include('herokuapp.urls')),
 ]

@@ -14,12 +14,17 @@ from django.http import JsonResponse
 
 from django.core import serializers
 
+# Cache
+from django.core.cache import cache
+
 import json
 
 # from models import User
 from . import models
 
 from django.db import connection
+
+CUSTOMER_KEY = "customer.all"
 
 
 def index(request):
@@ -57,6 +62,7 @@ def createDataCustomer(request, format=None):
     data = json.loads(json.dumps(request.data))	
     obj = models.Customer(**data)	
     obj.save()	
+    cache.delete(CUSTOMER_KEY)
     return Response({"id": obj.id, "result": "ok"})
 	
 	
@@ -64,7 +70,12 @@ def createDataCustomer(request, format=None):
 @parser_classes((JSONParser,))	
 # get all data from Customer	
 def readDataCustomer(request, format=None):	
-    return Response(serializers.serialize("json", models.Customer.objects.all()))	
+    customers = cache.get(CUSTOMER_KEY)
+    if not customers: 
+        customers = models.Customer.objects.all()
+        cache.set(CUSTOMER_KEY, customers) 
+
+    return Response(serializers.serialize("json", customers))	
 	
 	
 @api_view(['POST'])	
@@ -73,6 +84,7 @@ def readDataCustomer(request, format=None):
 def updateDataCustomer(request, format=None):	
     data = json.loads(json.dumps(request.data))	
     models.Customer(**data).save()	
+    cache.delete(CUSTOMER_KEY)
     return Response({"result": "ok"})	
 	
 	
@@ -82,6 +94,7 @@ def updateDataCustomer(request, format=None):
 def deleteDataCustomer(request, format=None):	
     data = json.loads(json.dumps(request.data))	
     models.Customer(**data).delete()	
+    cache.delete(CUSTOMER_KEY)
     return Response({"result": "ok"})	
 	
 	
