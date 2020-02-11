@@ -13,3 +13,4 @@ django-jet==1.0.8
 postgres==2.2.2
 python-memcached==1.59
 pylibmc==1.5.2
+django-import-export
