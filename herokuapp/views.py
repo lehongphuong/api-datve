@@ -119,7 +119,8 @@ def find_custommer_by_status(request, format=None):
 @parser_classes((JSONParser,))	
 # find data customer from two date
 def find_custommer_between_date(request, format=None):	
-    return Response(serializers.serialize("json", models.Customer.objects.filter(start_date__gte=request.data['start_date'], end_date__lte=request.data['end_date'])))	
+    customer = models.Customer.objects.filter(start_date__gte=request.data['start_date'], start_date__lte=request.data['end_date']) | models.Customer.objects.filter(end_date__gte=request.data['start_date'], end_date__lte=request.data['end_date'])
+    return Response(serializers.serialize("json", customer))	
 	
 # end Customer	
 # *********************************************
